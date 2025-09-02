@@ -1,0 +1,6 @@
+@SUT24_JohanHansson_TooliRent_HostAddress = http://localhost:5242
+
+GET {{SUT24_JohanHansson_TooliRent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

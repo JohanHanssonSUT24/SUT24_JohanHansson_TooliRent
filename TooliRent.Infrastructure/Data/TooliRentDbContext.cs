@@ -1,0 +1,37 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TooliRent.Domain.Entities;
+
+namespace TooliRent.Infrastructure.Data
+{
+    public class TooliRentDbContext : DbContext
+    {
+        public TooliRentDbContext(DbContextOptions<TooliRentDbContext> options) : base(options)
+        {
+        }
+        public DbSet<Tool> Tools { get; set; }
+        public DbSet<ToolCategory> ToolCategories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    UserName = "admin@tooli.se",
+                    PasswordHash = new byte[] {/*Hashed password*/},
+                    PasswordSalt = new byte[] {/*Salt*/},
+                    Role = "Admin"
+
+                }
+                );
+        }
+
+    }
+}

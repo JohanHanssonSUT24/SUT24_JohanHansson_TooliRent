@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TooliRent.Domain.Entities
+{
+    public class Tool
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsAvalible { get; set; } = true;
+
+        public int ToolCategoryId { get; set; }
+        public ToolCategory ToolCategory { get; set; }
+        public ICollection<Booking> Bookings
+        {
+            get; set;
+        }
+    }
+}
