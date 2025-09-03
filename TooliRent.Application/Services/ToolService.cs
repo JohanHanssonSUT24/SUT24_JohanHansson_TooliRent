@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
+using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories; 
 
 namespace TooliRent.Application.Services
@@ -23,6 +25,34 @@ namespace TooliRent.Application.Services
         {
             var tools = await _toolRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
+        }
+        public async Task<ToolDto> GetToolByIdAsync(int id)
+        {
+            var tool = await _toolRepository.GetByIdAsync(id);
+            if (tool == null) return null;
+            return _mapper.Map<ToolDto>(tool);
+        }
+        public async Task<ToolDto> CreateToolAsync(CreateToolDto toolDto)
+        {
+            var tool = _mapper.Map<Tool>(toolDto);
+            await _toolRepository.AddAsync(tool);
+            return _mapper.Map<ToolDto>(tool);
+        }
+        public async Task<ToolDto> UpdateToolAsync(UpdateToolDto toolDto)
+        {
+            var toolToUpdate = await _toolRepository.GetByIdAsync(toolDto.Id);
+            if (toolToUpdate == null) return null;
+            _mapper.Map(toolDto, toolToUpdate);
+            await _toolRepository.UpdateAsync(toolToUpdate);
+            return _mapper.Map<ToolDto>(toolToUpdate);
+        }
+        public async Task<ToolDto> DeleteToolAsync(int id)
+        {
+            var toolToDelete = await _toolRepository.GetByIdAsync(id);
+            if (toolToDelete == null) return null;
+            toolToDelete.IsDeleted = true;
+            await _toolRepository.UpdateAsync(toolToDelete);
+            return _mapper.Map<ToolDto>(toolToDelete);
         }
     }
 }

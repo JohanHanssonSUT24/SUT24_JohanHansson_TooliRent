@@ -4,6 +4,9 @@ using TooliRent.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Interfaces.Repositories;
 using AutoMapper;
+using TooliRent.Application.Interfaces.Services;
+using TooliRent.Application.Services;
+using TooliRent.Application.Mappings;
 
 namespace TooliRent.Api
 {
@@ -18,6 +21,10 @@ namespace TooliRent.Api
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IToolRepository, ToolRepository>();
+
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            builder.Services.AddScoped<IToolsService, ToolService>();
 
             // Add services to the container.
 

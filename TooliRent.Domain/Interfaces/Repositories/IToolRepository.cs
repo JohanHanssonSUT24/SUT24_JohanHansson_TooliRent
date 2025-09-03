@@ -12,5 +12,7 @@ namespace TooliRent.Domain.Interfaces.Repositories
         Task<IEnumerable<Tool>> GetAllAsync();
         Task<Tool> GetByIdAsync(int id);
         Task AddAsync(Tool tool);
+        Task UpdateAsync(Tool tool);
+        Task DeleteAsync(int id);
     }
 }
