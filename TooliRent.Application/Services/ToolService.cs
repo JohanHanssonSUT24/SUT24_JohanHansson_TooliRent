@@ -38,21 +38,19 @@ namespace TooliRent.Application.Services
             await _toolRepository.AddAsync(tool);
             return _mapper.Map<ToolDto>(tool);
         }
-        public async Task<ToolDto> UpdateToolAsync(UpdateToolDto toolDto)
+        public async Task UpdateToolAsync(UpdateToolDto toolDto)
         {
             var toolToUpdate = await _toolRepository.GetByIdAsync(toolDto.Id);
-            if (toolToUpdate == null) return null;
+            if (toolToUpdate == null) return;
             _mapper.Map(toolDto, toolToUpdate);
             await _toolRepository.UpdateAsync(toolToUpdate);
-            return _mapper.Map<ToolDto>(toolToUpdate);
         }
-        public async Task<ToolDto> DeleteToolAsync(int id)
+        public async Task DeleteToolAsync(int id)
         {
             var toolToDelete = await _toolRepository.GetByIdAsync(id);
-            if (toolToDelete == null) return null;
+            if (toolToDelete == null) return;
             toolToDelete.IsDeleted = true;
             await _toolRepository.UpdateAsync(toolToDelete);
-            return _mapper.Map<ToolDto>(toolToDelete);
         }
     }
 }

@@ -34,5 +34,19 @@ namespace TooliRent.Api.Controllers
             var createdTool = await _toolsService.CreateToolAsync(newToolDto);
             return CreatedAtAction(nameof(GetById), new { id = createdTool.Id }, createdTool);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateToolDto toolDto)
+        {
+            if (id != toolDto.Id) return BadRequest();
+
+            await _toolsService.UpdateToolAsync(toolDto);
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _toolsService.DeleteToolAsync(id);
+            return NoContent();
+        }
     }
 }
