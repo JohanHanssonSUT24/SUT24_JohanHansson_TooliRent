@@ -3,6 +3,7 @@ using TooliRent.Infrastructure.Data;
 using TooliRent.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Interfaces.Repositories;
+using AutoMapper;
 
 namespace TooliRent.Api
 {
