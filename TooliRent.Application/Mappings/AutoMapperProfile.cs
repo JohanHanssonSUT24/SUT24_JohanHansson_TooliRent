@@ -14,6 +14,8 @@ namespace TooliRent.Application.Mappings
         public AutoMapperProfile() 
         { 
             CreateMap<Tool, ToolDto>().ReverseMap();
+            CreateMap<CreateToolDto, Tool>();
+            CreateMap<UpdateToolDto, Tool>().ReverseMap();
         }
     }
 }

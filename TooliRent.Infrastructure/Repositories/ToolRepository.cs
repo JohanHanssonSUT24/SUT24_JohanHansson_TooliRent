@@ -37,10 +37,10 @@ namespace TooliRent.Infrastructure.Repositories
         }
         public async Task DeleteAsync(int id)
         {
-            var tool = await _context.Tools.FindAsync(id);
-            if (tool != null)
+            var toolToDelete = await _context.Tools.FindAsync(id);
+            if (toolToDelete != null)
             {
-                _context.Tools.Remove(tool);
+                _context.Tools.Remove(toolToDelete);
                 await _context.SaveChangesAsync();
             }
         }

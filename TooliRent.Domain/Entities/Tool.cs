@@ -12,6 +12,7 @@ namespace TooliRent.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public bool IsAvalible { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
 
         public int ToolCategoryId { get; set; }
         public ToolCategory ToolCategory { get; set; }
