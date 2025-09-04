@@ -22,9 +22,9 @@ namespace TooliRent.Api
 
             builder.Services.AddScoped<IToolRepository, ToolRepository>();
 
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+            builder.Services.AddScoped<IToolService, ToolService>();
 
-            builder.Services.AddScoped<IToolsService, ToolService>();
+            builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile));
 
             // Add services to the container.
 

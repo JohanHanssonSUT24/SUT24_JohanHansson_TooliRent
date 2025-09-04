@@ -12,7 +12,7 @@ using TooliRent.Domain.Interfaces.Repositories;
 
 namespace TooliRent.Application.Services
 {
-    public class ToolService : IToolsService
+    public class ToolService : IToolService
     {
         private readonly IToolRepository _toolRepository;
         private readonly IMapper _mapper;

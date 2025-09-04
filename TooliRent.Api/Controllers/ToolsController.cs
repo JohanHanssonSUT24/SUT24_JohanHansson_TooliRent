@@ -9,9 +9,9 @@ namespace TooliRent.Api.Controllers
     [ApiController]
     public class ToolsController : ControllerBase
     {
-        private readonly IToolsService _toolsService;
+        private readonly IToolService _toolsService;
 
-        public ToolsController(IToolsService toolsService)
+        public ToolsController(IToolService toolsService)
         {
             _toolsService = toolsService;
         }
