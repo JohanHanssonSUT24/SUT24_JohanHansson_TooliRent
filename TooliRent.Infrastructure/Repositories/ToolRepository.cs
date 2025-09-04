@@ -19,11 +19,13 @@ namespace TooliRent.Infrastructure.Repositories
         }
         public async Task<IEnumerable<Tool>> GetAllAsync()
         {
-            return await _context.Tools.ToListAsync();
+            return await _context.Tools
+                .Where(t => !t.IsDeleted)
+                .ToListAsync();
         }
         public async Task<Tool> GetByIdAsync(int id)
         {
-            return await _context.Tools.FindAsync(id);
+            return await _context.Tools.Where(t=> !t.IsDeleted && t.Id == id).FirstOrDefaultAsync();
         }
         public async Task AddAsync(Tool tool)
         {
