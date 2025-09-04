@@ -13,6 +13,6 @@ namespace TooliRent.Domain.Interfaces.Repositories
         Task<Tool> GetByIdAsync(int id);
         Task AddAsync(Tool tool);
         Task UpdateAsync(Tool tool);
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

@@ -45,12 +45,10 @@ namespace TooliRent.Application.Services
             _mapper.Map(toolDto, toolToUpdate);
             await _toolRepository.UpdateAsync(toolToUpdate);
         }
-        public async Task DeleteToolAsync(int id)
+        public async Task<bool> DeleteToolAsync(int id)
         {
-            var toolToDelete = await _toolRepository.GetByIdAsync(id);
-            if (toolToDelete == null) return;
-            toolToDelete.IsDeleted = true;
-            await _toolRepository.UpdateAsync(toolToDelete);
+            return await _toolRepository.DeleteAsync(id);
+
         }
     }
 }

@@ -31,6 +31,11 @@ namespace TooliRent.Infrastructure.Data
 
                 }
                 );
+            modelBuilder.Entity<ToolCategory>().HasData(
+                new ToolCategory { Id = 1, Name = "Elverktyg", Description = "Verktyg som drivs med el." },
+                new ToolCategory { Id = 2, Name = "Handverktyg", Description = "Verktyg som används manuellt." },
+                new ToolCategory { Id = 3, Name = "Trädgårdsverktyg", Description = "Verktyg för trädgårdsskötsel." }
+                );
         }
 
     }

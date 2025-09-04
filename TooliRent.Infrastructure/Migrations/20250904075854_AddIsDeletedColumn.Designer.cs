@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TooliRent.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TooliRent.Infrastructure.Data;
 namespace TooliRent.Infrastructure.Migrations
 {
     [DbContext(typeof(TooliRentDbContext))]
-    partial class TooliRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250904075854_AddIsDeletedColumn")]
+    partial class AddIsDeletedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,10 +110,6 @@ namespace TooliRent.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -118,26 +117,6 @@ namespace TooliRent.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ToolCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Verktyg som drivs med el.",
-                            Name = "Elverktyg"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Verktyg som används manuellt.",
-                            Name = "Handverktyg"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Verktyg för trädgårdsskötsel.",
-                            Name = "Trädgårdsverktyg"
-                        });
                 });
 
             modelBuilder.Entity("TooliRent.Domain.Entities.User", b =>
