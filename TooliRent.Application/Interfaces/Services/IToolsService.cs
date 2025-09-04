@@ -13,6 +13,6 @@ namespace TooliRent.Application.Interfaces.Services
         Task<ToolDto> GetToolByIdAsync(int id);
         Task<ToolDto> CreateToolAsync(CreateToolDto toolDto);
         Task UpdateToolAsync(UpdateToolDto toolDto);
-        Task DeleteToolAsync(int id);
+        Task<bool> DeleteToolAsync(int id);
     }
 }

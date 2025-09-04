@@ -7,6 +7,10 @@ using AutoMapper;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.Services;
 using TooliRent.Application.Mappings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using TooliRent.Application.Validators;
+
 
 namespace TooliRent.Api
 {
@@ -29,6 +33,8 @@ namespace TooliRent.Api
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateToolDtoValidator>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
