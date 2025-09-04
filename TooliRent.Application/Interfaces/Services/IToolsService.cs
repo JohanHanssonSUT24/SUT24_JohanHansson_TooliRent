@@ -7,7 +7,7 @@ using TooliRent.Application.DTOs;
 
 namespace TooliRent.Application.Interfaces.Services
 {
-    public interface IToolsService
+    public interface IToolService
     {
         Task<IEnumerable<ToolDto>> GetAllToolsAsync();
         Task<ToolDto> GetToolByIdAsync(int id);

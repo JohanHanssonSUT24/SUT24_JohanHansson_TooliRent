@@ -11,5 +11,6 @@ namespace TooliRent.Application.DTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public int ToolCategoryId { get; set; }
+        public decimal RentalPrice { get; set; }
     }
 }
