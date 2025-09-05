@@ -21,7 +21,7 @@ namespace TooliRent.Application.Services
             _toolRepository = toolRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string searchTerm = null)
+        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string searchTerm)
         {
             var tools = await _toolRepository.GetAllAsync(searchTerm);
             return _mapper.Map<IEnumerable<ToolDto>>(tools);

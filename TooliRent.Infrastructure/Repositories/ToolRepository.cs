@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
 using TooliRent.Infrastructure.Data;
+using TooliRent.Application.DTOs;
 
 namespace TooliRent.Infrastructure.Repositories
 {
@@ -17,13 +18,14 @@ namespace TooliRent.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Tool>> GetAllAsync(string searchTerm = null)
+        public async Task<IEnumerable<Tool>> GetAllAsync(string searchTerm)
         {
             var query = _context.Tools.Where(t => !t.IsDeleted);
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm));
             }
+
             return await query.ToListAsync();
         }
         public async Task<Tool> GetByIdAsync(int id)
