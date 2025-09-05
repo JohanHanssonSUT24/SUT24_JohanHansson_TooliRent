@@ -16,9 +16,9 @@ namespace TooliRent.Api.Controllers
             _toolsService = toolsService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string searchTerm)
         {
-            var tools = await _toolsService.GetAllToolsAsync();
+            var tools = await _toolsService.GetAllToolsAsync(searchTerm);
             return Ok(tools);
         }
         [HttpGet("{id}")]
@@ -35,9 +35,9 @@ namespace TooliRent.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdTool.Id }, createdTool);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateToolDto toolDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateToolDto toolDto)
         {
-            if (id != toolDto.Id) return BadRequest();
+            if (!ModelState.IsValid || id != toolDto.Id) return BadRequest(ModelState);
 
             await _toolsService.UpdateToolAsync(toolDto);
             return NoContent();

@@ -17,11 +17,14 @@ namespace TooliRent.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Tool>> GetAllAsync()
+        public async Task<IEnumerable<Tool>> GetAllAsync(string searchTerm = null)
         {
-            return await _context.Tools
-                .Where(t => !t.IsDeleted)
-                .ToListAsync();
+            var query = _context.Tools.Where(t => !t.IsDeleted);
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm));
+            }
+            return await query.ToListAsync();
         }
         public async Task<Tool> GetByIdAsync(int id)
         {
