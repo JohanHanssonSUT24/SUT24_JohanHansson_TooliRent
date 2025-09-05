@@ -9,7 +9,7 @@ namespace TooliRent.Domain.Interfaces.Repositories
 {
     public interface IToolRepository
     {
-        Task<IEnumerable<Tool>> GetAllAsync(string searchTerm = null);
+        Task<IEnumerable<Tool>> GetAllAsync(string searchTerm);
         Task<Tool> GetByIdAsync(int id);
         Task AddAsync(Tool tool);
         Task UpdateAsync(Tool tool);
