@@ -24,9 +24,9 @@ namespace TooliRent.Infrastructure.Data
                 new User
                 {
                     Id = 1,
-                    UserName = "admin@tooli.se",
-                    PasswordHash = new byte[] {/*Hashed password*/},
-                    PasswordSalt = new byte[] {/*Salt*/},
+                    Name = "Admin",
+                    Email = "admin@tooli.se",
+                    PasswordHash = "admin",
                     Role = "Admin"
 
                 }

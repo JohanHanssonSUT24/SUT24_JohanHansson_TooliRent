@@ -148,19 +148,19 @@ namespace TooliRent.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Role")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -172,10 +172,10 @@ namespace TooliRent.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            PasswordHash = new byte[0],
-                            PasswordSalt = new byte[0],
-                            Role = "Admin",
-                            UserName = "admin@tooli.se"
+                            Email = "admin@tooli.se",
+                            Name = "Admin",
+                            PasswordHash = "admin",
+                            Role = "Admin"
                         });
                 });
 
@@ -197,7 +197,7 @@ namespace TooliRent.Infrastructure.Migrations
             modelBuilder.Entity("TooliRent.Domain.Entities.Booking", b =>
                 {
                     b.HasOne("TooliRent.Domain.Entities.User", "User")
-                        .WithMany("Bookings")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -219,11 +219,6 @@ namespace TooliRent.Infrastructure.Migrations
             modelBuilder.Entity("TooliRent.Domain.Entities.ToolCategory", b =>
                 {
                     b.Navigation("Tools");
-                });
-
-            modelBuilder.Entity("TooliRent.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
 using TooliRent.Infrastructure.Data;
-using TooliRent.Application.DTOs;
+
 
 namespace TooliRent.Infrastructure.Repositories
 {
