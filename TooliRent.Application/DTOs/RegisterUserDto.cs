@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace TooliRent.Application.DTOs
 {
     public class RegisterUserDto
