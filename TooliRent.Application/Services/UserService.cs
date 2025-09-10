@@ -6,33 +6,37 @@ using System.Threading.Tasks;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.DTOs;
 using TooliRent.Domain.Entities;
-using TooliRent.Domain.Interfaces.Repositories;
+
 
 namespace TooliRent.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        private readonly TooliRentDbContext _context;
+        public UserService(TooliRentDbContext context)
         {
-            _userRepository = userRepository;
+            _context = context;
         }
         public async Task<bool> RegisterUserAsync(RegisterUserDto registerDto)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(registerDto.Email);
+            var existingUser = await _context.Users.FirstorDefaultAsync(u => u.Email == registerDto.Email);
             if (existingUser != null)
             {
-                return false; // User with the same email already exists
+                return false; 
+
             }
             var newUser = new User
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
-                PasswordHash = registerDto.Password, // In a real application, hash the password
+
+                PasswordHash = registerDto.Password,
                 Role = "User"
             };
-            await _userRepository.AddAsync(newUser);
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
             return true;
         }
     }
