@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
-using TooliRent.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using TooliRent.Infrastructure.Data;
 
 namespace TooliRent.Infrastructure.Repositories
 {
