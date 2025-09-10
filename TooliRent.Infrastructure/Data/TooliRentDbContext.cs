@@ -24,6 +24,7 @@ namespace TooliRent.Infrastructure.Data
                 new User
                 {
                     Id = 1,
+                    Name = "Admin",
                     Email = "admin@tooli.se",
                     PasswordHash = "admin",
                     Role = "Admin"
