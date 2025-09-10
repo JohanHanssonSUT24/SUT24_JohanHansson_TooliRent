@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TooliRent.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialUserSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +19,8 @@ namespace TooliRent.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,9 +33,9 @@ namespace TooliRent.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -49,6 +52,7 @@ namespace TooliRent.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAvalible = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     ToolCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -110,9 +114,19 @@ namespace TooliRent.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "ToolCategories",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Verktyg som drivs med el.", "Elverktyg" },
+                    { 2, "Verktyg som används manuellt.", "Handverktyg" },
+                    { 3, "Verktyg för trädgårdsskötsel.", "Trädgårdsverktyg" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "PasswordHash", "PasswordSalt", "Role", "UserName" },
-                values: new object[] { 1, new byte[0], new byte[0], "Admin", "admin@tooli.se" });
+                columns: new[] { "Id", "Email", "Name", "PasswordHash", "Role" },
+                values: new object[] { 1, "admin@tooli.se", "Admin", "admin", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_UserId",

@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TooliRent.Application.Interfaces.Services;
+﻿using System.Threading.Tasks;
 using TooliRent.Application.DTOs;
+using TooliRent.Application.Interfaces.Services;
 using TooliRent.Domain.Entities;
+using TooliRent.Domain.Interfaces.Repositories;
 
 
 namespace TooliRent.Application.Services
 {
     public class UserService : IUserService
     {
-
         private readonly TooliRentDbContext _context;
         public UserService(TooliRentDbContext context)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
+
         public async Task<bool> RegisterUserAsync(RegisterUserDto registerDto)
         {
-            var existingUser = await _context.Users.FirstorDefaultAsync(u => u.Email == registerDto.Email);
+            var existingUser = await _userRepository.GetByEmailAsync(registerDto.Email);
             if (existingUser != null)
             {
                 return false; 
-
             }
+
             var newUser = new User
             {
                 Name = registerDto.Name,
@@ -36,7 +33,6 @@ namespace TooliRent.Application.Services
             };
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-
             return true;
         }
     }
