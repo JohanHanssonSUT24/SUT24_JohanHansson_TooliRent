@@ -18,6 +18,7 @@ namespace TooliRent.Api.Controllers
             _toolsService = toolsService;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null)
         {
             var tools = await _toolsService.GetAllToolsAsync(searchTerm);
@@ -39,9 +40,17 @@ namespace TooliRent.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateToolDto toolDto)
         {
-            if (!ModelState.IsValid || id != toolDto.Id) return BadRequest(ModelState);
+            if (id != toolDto.Id)
+            {
+                return BadRequest("Tool ID in URL and body do not match");
+            }
 
-            await _toolsService.UpdateToolAsync(toolDto);
+            var updateSuccessful = await _toolsService.UpdateToolAsync(toolDto);
+            if(!updateSuccessful)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
         [HttpDelete("{id}")]
