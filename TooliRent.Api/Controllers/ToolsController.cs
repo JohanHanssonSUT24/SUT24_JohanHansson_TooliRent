@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TooliRent.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ToolsController : ControllerBase
     {
         private readonly IToolService _toolsService;
@@ -16,7 +18,7 @@ namespace TooliRent.Api.Controllers
             _toolsService = toolsService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string searchTerm)
+        public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null)
         {
             var tools = await _toolsService.GetAllToolsAsync(searchTerm);
             return Ok(tools);
