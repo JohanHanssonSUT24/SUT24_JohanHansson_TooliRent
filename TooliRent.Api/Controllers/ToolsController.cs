@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TooliRent.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ToolsController : ControllerBase
     {
         private readonly IToolService _toolsService;

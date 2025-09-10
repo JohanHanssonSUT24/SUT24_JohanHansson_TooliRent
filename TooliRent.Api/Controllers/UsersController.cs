@@ -29,5 +29,19 @@ namespace TooliRent.Api.Controllers
             }
             return Ok(new { message = "User registered successfully." });
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserDto loginDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var token = await _userService.LoginUserAsync(loginDto);
+            if (token == null)
+            {
+                return Unauthorized(new { message = "Invalid email or password." });
+            }
+            return Ok(new { token });
+        }
     }
 }
