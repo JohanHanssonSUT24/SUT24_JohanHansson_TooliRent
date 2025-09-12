@@ -20,7 +20,7 @@ namespace TooliRent.Infrastructure.Repositories
         }
         public async Task<IEnumerable<Tool>> GetAllAsync(string searchTerm)
         {
-            var query = _context.Tools.Where(t => !t.IsDeleted);
+            var query = _context.Tools.AsQueryable().Where(t => !t.IsDeleted);
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm));

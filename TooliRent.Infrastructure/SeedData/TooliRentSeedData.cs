@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Entities;
 using TooliRent.Infrastructure.Data;
@@ -8,66 +8,53 @@ namespace TooliRent.Infrastructure.SeedData
 {
     public static class TooliRentSeedData
     {
-        public static async Task EnsureSeedData(TooliRentDbContext context)
+        public static void Seed(TooliRentDbContext context)
         {
-            if(!await context.ToolCategories.AnyAsync())
+            if (context.Tools.Any())
             {
-                var powerTools = new ToolCategory { Name = "Powertools" };
-                var regularTools = new ToolCategory { Name = "Regular tools" };
-                await context.ToolCategories.AddRangeAsync(powerTools, regularTools);
-                await context.SaveChangesAsync();
+                return;
 
-                if( !await context.Tools.AnyAsync())
-                {
-                    var tools = new List<Tool>
-                    {
-                        new Tool
-                        {
-                            Name = "Slaghammare Bosch",
-                            Description = "Kraftfull borr för sten och cement",
-                            DailyRentalPrice = 100.00m,
-                            ToolCategoryId = powerTools.Id
-                        },
-                        new Tool
-                        {
-                            Name = "Sticksåg DeWalt",
-                            Description = "Sticksåg med utbyttbart blad",
-                            DailyRentalPrice = 99.00m,
-                            ToolCategoryId = powerTools.Id
-                        },
-                        new Tool
-                        {
-                            Name = "Vinkelslip Makita",
-                            Description = "Vinkelslip med 25cm klinga",
-                            DailyRentalPrice = 110.00m,
-                            ToolCategoryId = powerTools.Id
-                        },
-                        new Tool
-                        {
-                            Name = "Hammare",
-                            Description = "Hammare, 11cm, Härdat stål",
-                            DailyRentalPrice = 50.00m,
-                            ToolCategoryId = regularTools.Id
-                        },
-                        new Tool
-                        {
-                            Name = "Såg",
-                            Description = "Fogsvans",
-                            DailyRentalPrice = 45.00m,
-                            ToolCategoryId = regularTools.Id
-                        },
-                        new Tool
-                        {
-                            Name = "Tumstock",
-                            Description = "2m",
-                            DailyRentalPrice = 11.00m,
-                            ToolCategoryId = regularTools.Id
-                        }
-                    };
-                    await context.Tools.AddRangeAsync(tools);
-                    await context.SaveChangesAsync();
-                }
             }
+
+            var categories = new List<ToolCategory>
+            {
+                new ToolCategory { Name = "Elverktyg", Description = "Verktyg som drivs med el." },
+                new ToolCategory { Name = "Handverktyg", Description = "Verktyg som används manuellt." },
+                new ToolCategory { Name = "Trädgårdsverktyg", Description = "Verktyg för trädgårdsskötsel." },
+                new ToolCategory { Name = "Måleriverktyg", Description = "Verktyg för målning och renovering." },
+                new ToolCategory { Name = "Bilverktyg", Description = "Verktyg för fordon." }
+            };
+
+            context.ToolCategories.AddRange(categories); // Ändrad
+            context.SaveChanges(); // Ändrad
+
+            var tools = new List<Tool>();
+            var random = new System.Random();
+
+            for (int i = 1; i <= 30; i++)
+            {
+                var randomCategory = categories[random.Next(categories.Count)];
+                tools.Add(new Tool
+                {
+                    Name = $"Verktyg {i}",
+                    Description = $"Beskrivning för verktyg {i}. Kategorin är {randomCategory.Name}.",
+                    RentalPrice = (decimal)(random.Next(50, 500)),
+                    ToolCategory = randomCategory
+                });
+            }
+
+            context.Tools.AddRange(tools); // Ändrad
+            context.SaveChanges(); // Ändrad
+
+            var user = new User
+            {
+                Name = "Admin",
+                Email = "admin@tooli.se",
+                PasswordHash = "admin"
+            };
+
+            context.Users.Add(user); // Ändrad
+            context.SaveChanges(); // Ändrad
         }
     }
 }
