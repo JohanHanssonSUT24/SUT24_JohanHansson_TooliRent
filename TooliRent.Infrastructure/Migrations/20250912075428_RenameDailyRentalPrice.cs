@@ -5,25 +5,24 @@
 namespace TooliRent.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class RenameDailyRentalPrice : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<decimal>(
+            migrationBuilder.RenameColumn(
                 name: "DailyRentalPrice",
                 table: "Tools",
-                type: "decimal(18,2)",
-                nullable: false,
-                defaultValue: 0m);
+                newName: "RentalPrice");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "DailyRentalPrice",
-                table: "Tools");
+            migrationBuilder.RenameColumn(
+                name: "RentalPrice",
+                table: "Tools",
+                newName: "DailyRentalPrice");
         }
     }
 }

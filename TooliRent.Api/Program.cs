@@ -13,13 +13,15 @@ using TooliRent.Application.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
+using TooliRent.Infrastructure.SeedData;
 
 
 namespace TooliRent.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +88,12 @@ namespace TooliRent.Api
             });
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TooliRentDbContext>();
+                dbContext.Database.Migrate();
+                TooliRentSeedData.Seed(dbContext);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -100,6 +108,7 @@ namespace TooliRent.Api
 
 
             app.MapControllers();
+            
 
             app.Run();
         }

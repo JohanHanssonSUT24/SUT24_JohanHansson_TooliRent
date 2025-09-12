@@ -11,7 +11,7 @@ namespace TooliRent.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal DailyRentalPrice { get; set; }
+        public decimal RentalPrice { get; set; }
         public bool IsAvalible { get; set; }
         public bool IsDeleted { get; set; }
 
