@@ -16,6 +16,10 @@ namespace TooliRent.Application.Mappings
             CreateMap<Tool, ToolDto>().ReverseMap();
             CreateMap<CreateToolDto, Tool>();
             CreateMap<UpdateToolDto, Tool>().ReverseMap();
+
+            CreateMap<ToolCategory, ToolCategoryDto>();
+            CreateMap<CreateToolCategoryDto, ToolCategoryDto>();
+            CreateMap<UpdateToolCategoryDto, ToolCategoryDto>();
         }
     }
 }

@@ -51,6 +51,9 @@ namespace TooliRent.Api
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddScoped<IToolCategoryRepository, ToolCategoryRepository>();
+            builder.Services.AddScoped<IToolCategoryService, ToolCategoryService>();
+
             builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile));
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateToolDtoValidator>();

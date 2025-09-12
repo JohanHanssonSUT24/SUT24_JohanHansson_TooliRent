@@ -11,7 +11,7 @@ namespace TooliRent.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<ToolCategory>> GetAllAsync();
         Task<ToolCategory> GetByIdAsync(int id);
-        Task AddAsync(ToolCategory category);
+        Task <ToolCategory> AddAsync(ToolCategory category);
         Task UpdateAsync(ToolCategory category);
         Task DeleteAsync(int id);
     }
