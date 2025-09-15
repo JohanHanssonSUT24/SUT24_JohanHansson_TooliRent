@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TooliRent.Domain.Entities;
+using TooliRent.Domain.Enums;
 
 namespace TooliRent.Domain.Interfaces.Repositories
 {
     public interface IToolRepository
     {
-        Task<IEnumerable<Tool>> GetAllAsync(string searchTerm);
+        Task<IEnumerable<Tool>> GetAllAsync(string? searchTerm = null, ToolStatus? status = null);
         Task<Tool> GetByIdAsync(int id);
         Task AddAsync(Tool tool);
         Task UpdateAsync(Tool tool);

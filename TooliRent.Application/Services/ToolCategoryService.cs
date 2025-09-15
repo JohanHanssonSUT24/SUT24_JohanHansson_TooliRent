@@ -6,7 +6,7 @@ using TooliRent.Domain.Interfaces.Repositories;
 
 namespace TooliRent.Application.Services
 {
-    public class ToolCategoryService : IToolCategoryRepository
+    public class ToolCategoryService : IToolCategoryService
     {
         private readonly IToolCategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ namespace TooliRent.Application.Services
             _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ToolCategoryDto>> GetToolCategoriesAsync()
+        public async Task<IEnumerable<ToolCategoryDto>> GetAllCategoriesAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<ToolCategoryDto>>(categories);
@@ -35,7 +35,7 @@ namespace TooliRent.Application.Services
         public async Task<bool> UpdateCategoryAsync(int id, UpdateToolCategoryDto categoryDto)
         {
             var existingCategory = await _categoryRepository.GetByIdAsync(id);
-            if (existingCategory != null) return false;
+            if (existingCategory == null) return false;
 
             _mapper.Map(categoryDto, existingCategory);
             await _categoryRepository.UpdateAsync(existingCategory);
@@ -44,7 +44,7 @@ namespace TooliRent.Application.Services
         public async Task<bool> DeleteCategoryAsync(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
-            if (category != null) return false;
+            if (category == null) return false;
             await _categoryRepository.DeleteAsync(id);
             return true;
         }

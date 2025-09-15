@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TooliRent.Domain.Enums;
 
 namespace TooliRent.Domain.Entities
 {
@@ -12,11 +13,12 @@ namespace TooliRent.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal RentalPrice { get; set; }
-        public bool IsAvalible { get; set; }
         public bool IsDeleted { get; set; }
 
         public int ToolCategoryId { get; set; }
         public ToolCategory ToolCategory { get; set; }
+
+        public ToolStatus Status { get; set; } = ToolStatus.Avalible;
         public ICollection<Booking> Bookings
         {
             get; set;
