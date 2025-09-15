@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Domain.Entities;
+using TooliRent.Domain.Enums;
 using TooliRent.Domain.Interfaces.Repositories; 
 
 namespace TooliRent.Application.Services
@@ -21,9 +22,9 @@ namespace TooliRent.Application.Services
             _toolRepository = toolRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string searchTerm)
+        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? searchTerm = null, ToolStatus? status = null)
         {
-            var tools = await _toolRepository.GetAllAsync(searchTerm);
+            var tools = await _toolRepository.GetAllAsync(searchTerm, status);
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
         public async Task<ToolDto> GetToolByIdAsync(int id)

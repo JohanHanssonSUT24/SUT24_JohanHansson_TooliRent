@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TooliRent.Domain.Entities;
+using TooliRent.Domain.Enums;
 using TooliRent.Domain.Interfaces.Repositories;
 using TooliRent.Infrastructure.Data;
+
 
 
 namespace TooliRent.Infrastructure.Repositories
@@ -18,12 +20,16 @@ namespace TooliRent.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<Tool>> GetAllAsync(string searchTerm)
+        public async Task<IEnumerable<Tool>> GetAllAsync(string? searchTerm = null, ToolStatus? status = null)
         {
             var query = _context.Tools.AsQueryable().Where(t => !t.IsDeleted);
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(t => t.Name.Contains(searchTerm) || t.Description.Contains(searchTerm));
+            }
+            if (status.HasValue)
+            {
+                query = query.Where(t => t.Status == status.Value);
             }
 
             return await query.ToListAsync();

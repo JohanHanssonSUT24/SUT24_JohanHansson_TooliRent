@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TooliRent.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TooliRent.Infrastructure.Data;
 namespace TooliRent.Infrastructure.Migrations
 {
     [DbContext(typeof(TooliRentDbContext))]
-    partial class TooliRentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250915184445_AddToolStatus")]
+    partial class AddToolStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,10 +92,10 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Property<decimal>("RentalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("ToolCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ToolCategoryId")
+                    b.Property<int>("ToolStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

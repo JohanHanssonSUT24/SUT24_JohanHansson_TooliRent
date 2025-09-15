@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using TooliRent.Domain.Enums;
 
 namespace TooliRent.Api.Controllers
 {
@@ -19,9 +20,9 @@ namespace TooliRent.Api.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null)
+        public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null, [FromQuery] ToolStatus? status = null)
         {
-            var tools = await _toolsService.GetAllToolsAsync(searchTerm);
+            var tools = await _toolsService.GetAllToolsAsync(searchTerm, status);
             return Ok(tools);
         }
         [HttpGet("{id}")]
