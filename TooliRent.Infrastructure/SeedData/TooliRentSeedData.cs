@@ -50,7 +50,8 @@ namespace TooliRent.Infrastructure.SeedData
             {
                 Name = "Admin",
                 Email = "admin@tooli.se",
-                PasswordHash = "admin"
+                PasswordHash = "admin",
+                Role = "Admin"
             };
 
             context.Users.Add(user); // Ändrad
