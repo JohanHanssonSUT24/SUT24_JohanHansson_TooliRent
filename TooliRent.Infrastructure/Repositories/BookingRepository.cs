@@ -48,6 +48,7 @@ namespace TooliRent.Infrastructure.Repositories
             return await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .Include(b => b.Tool)
+                .Include(b => b.User)
                 .ToListAsync();
         }
     }

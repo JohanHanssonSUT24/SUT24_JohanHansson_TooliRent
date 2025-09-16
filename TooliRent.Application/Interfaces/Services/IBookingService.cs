@@ -11,5 +11,6 @@ namespace TooliRent.Application.Interfaces.Services
         Task<BookingDto> CreateBookingAsync(CreateBookingDto bookingDto, int userId);
         Task<bool> UpdateBookingAsync(int id, UpdateBookingDto bookingDto);
         Task<IEnumerable<BookingDto>> GetBookingsByUserIdAsync(int userId);
+        Task<bool> CancelBookingAsync(int bookingId, int userId);
     }
 }

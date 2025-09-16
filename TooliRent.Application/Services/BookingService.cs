@@ -50,7 +50,7 @@ namespace TooliRent.Application.Services
 
             var booking = _mapper.Map<Booking>(bookingDto);
             booking.UserId = userId;
-            booking.TotalCost = CalculateTotalPrice(bookingDto.StartDate, bookingDto.EndDate, tool.RentalPrice);
+            booking.TotalPrice = CalculateTotalPrice(bookingDto.StartDate, bookingDto.EndDate, tool.RentalPrice);
             booking.Status = BookingStatus.Active;
 
             await _bookingRepository.AddBookingAsync(booking);
@@ -112,6 +112,24 @@ namespace TooliRent.Application.Services
         {
             var bookings = await _bookingRepository.GetBookingsByUserIdAsync(userId);
             return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+        }
+        public async Task<bool> CancelBookingAsync(int bookingId, int userId)
+        {
+            var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+            if (booking == null || booking.UserId != userId)
+            {
+                return false;
+            }
+            booking.Status = BookingStatus.Cancelled;
+            await _bookingRepository.UpdateBookingAsync(booking);
+
+            var tool = await _toolRepository.GetByIdAsync(booking.ToolId);
+            if( tool != null)
+            {
+                tool.Status = ToolStatus.Available;
+                await _toolRepository.UpdateAsync(tool);
+            }
+            return true;
         }
     }
 }

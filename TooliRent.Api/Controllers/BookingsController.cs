@@ -89,5 +89,21 @@ namespace TooliRent.Api.Controllers
             }
             return Ok(bookings);
         }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Member, Admin")]
+        public async Task<ActionResult> CancelBooking(int id)
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                return Unauthorized();
+            }
+            var result = await _bookingService.CancelBookingAsync(id, userId);
+            if (result)
+            {
+                return Ok(new { message = "Booking cancelled successfully." });
+            }
+            return BadRequest(new {message = "Could not cancel booking. Booking not found."});
+        }
     }
 }

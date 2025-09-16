@@ -16,7 +16,7 @@ namespace TooliRent.Domain.Entities
         public Tool Tool { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal TotalCost { get; set; }
+        public decimal TotalPrice { get; set; }
         public BookingStatus Status { get; set; }
 
 
