@@ -8,7 +8,7 @@ namespace TooliRent.Domain.Enums
 {
     public enum ToolStatus
     {
-        Avalible,
+        Available,
         Rented,
         UnderMaintenance,
         Expired

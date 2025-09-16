@@ -16,7 +16,7 @@ namespace TooliRent.Application.DTOs
         public decimal RentalPrice { get; set; }
         [Required]
         public int ToolCategoryId { get; set; }
-        public ToolStatus Status { get; set; } = ToolStatus.Avalible;
+        public ToolStatus Status { get; set; } = ToolStatus.Available;
         
     }
 }
