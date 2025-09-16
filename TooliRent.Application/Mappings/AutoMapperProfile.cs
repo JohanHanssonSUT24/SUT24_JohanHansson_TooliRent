@@ -26,6 +26,11 @@ namespace TooliRent.Application.Mappings
             CreateMap<ToolCategory, ToolCategoryDto>().ReverseMap();
             CreateMap<CreateToolCategoryDto, ToolCategory>();
             CreateMap<UpdateToolCategoryDto, ToolCategory>();
+
+            CreateMap<CreateBookingDto, Booking>();
+            CreateMap<Booking, BookingDto>()
+                .ForMember(dest => dest.ToolName, opt => opt.MapFrom(src => src.Tool.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name));
         }
     }
 }

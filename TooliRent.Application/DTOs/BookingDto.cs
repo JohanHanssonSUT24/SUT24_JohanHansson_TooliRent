@@ -5,20 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TooliRent.Domain.Enums;
 
-namespace TooliRent.Domain.Entities
+namespace TooliRent.Application.DTOs
 {
-    public  class Booking
+    public class BookingDto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
         public int ToolId { get; set; }
-        public Tool Tool { get; set; }
+        public string ToolName { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal TotalCost { get; set; }
+        public decimal TotalPrice { get; set; }
         public BookingStatus Status { get; set; }
-
-
     }
 }

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace TooliRent.Domain.Enums
 {
-    public enum ToolStatus
+    public enum BookingStatus
     {
-        Available,
-        Rented,
-        UnderMaintenance,
-        Expired
+        Active,
+        Completed,
+        Cancelled
     }
 }

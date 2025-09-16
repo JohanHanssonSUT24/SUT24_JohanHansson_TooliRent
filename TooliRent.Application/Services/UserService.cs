@@ -3,12 +3,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace TooliRent.Application.Services
 {
@@ -17,12 +19,14 @@ namespace TooliRent.Application.Services
 
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly PasswordHasher<User> _passwordHasher;
 
 
         public UserService(IUserRepository userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _passwordHasher = new PasswordHasher<User>();
         }
 
         public async Task<bool> RegisterUserAsync(RegisterUserDto registerDto)
@@ -37,7 +41,7 @@ namespace TooliRent.Application.Services
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
-                PasswordHash = registerDto.Password,
+                PasswordHash = _passwordHasher.HashPassword(null, registerDto.Password),
                 Role = "User"
             };
 
@@ -48,7 +52,8 @@ namespace TooliRent.Application.Services
         public async Task<string?> LoginUserAsync(LoginUserDto loginDto)
         {
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
-            if (user == null || user.PasswordHash != loginDto.Password)
+            var verificationResult = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, loginDto.Password);
+            if (user == null || verificationResult == PasswordVerificationResult.Failed)
             {
                 return null;
             }
@@ -64,7 +69,7 @@ namespace TooliRent.Application.Services
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim("userId", user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             });
             
             var tokenDescriptor = new SecurityTokenDescriptor
