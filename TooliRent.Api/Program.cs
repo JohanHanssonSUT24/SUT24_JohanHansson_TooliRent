@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
 using TooliRent.Infrastructure.SeedData;
+using System.Text.Json.Serialization;
 
 
 namespace TooliRent.Api
@@ -59,6 +60,13 @@ namespace TooliRent.Api
             builder.Services.AddValidatorsFromAssemblyContaining<CreateToolDtoValidator>();
             // Add services to the container.
             builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+                
+                
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

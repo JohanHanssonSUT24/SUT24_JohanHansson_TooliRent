@@ -19,9 +19,6 @@ namespace TooliRent.Domain.Entities
         public ToolCategory ToolCategory { get; set; }
 
         public ToolStatus Status { get; set; } = ToolStatus.Avalible;
-        public ICollection<Booking> Bookings
-        {
-            get; set;
-        }
+        public ICollection<Booking> Bookings { get; set; }
     }
 }
