@@ -51,5 +51,14 @@ namespace TooliRent.Infrastructure.Repositories
                 .Include(b => b.User)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Booking>> GetActiveBookingsForToolAsync(int toolId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Bookings
+                .Where(b => b.ToolId == toolId &&
+                b.Status == Domain.Enums.BookingStatus.Active &&
+                (startDate < b.EndDate && endDate > b.StartDate))
+
+                .ToListAsync();
+        }
     }
 }
