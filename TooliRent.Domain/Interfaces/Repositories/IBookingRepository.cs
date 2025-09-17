@@ -16,5 +16,6 @@ namespace TooliRent.Domain.Interfaces.Repositories
         Task DeleteBookingAsync(int id);
 
         Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId);
+        Task<IEnumerable<Booking>> GetActiveBookingsForToolAsync(int toolId, DateTime startDate, DateTime endDate);
     }
 }
