@@ -10,7 +10,6 @@ using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
-using Microsoft.AspNetCore.Identity;
 
 namespace TooliRent.Application.Services
 {
@@ -19,14 +18,14 @@ namespace TooliRent.Application.Services
 
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
 
-        public UserService(IUserRepository userRepository, IConfiguration configuration)
+        public UserService(IUserRepository userRepository, IConfiguration configuration, IPasswordHasher<User> passwordHasher)
         {
             _userRepository = userRepository;
             _configuration = configuration;
-            _passwordHasher = new PasswordHasher<User>();
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<bool> RegisterUserAsync(RegisterUserDto registerDto)
@@ -41,10 +40,9 @@ namespace TooliRent.Application.Services
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
-                PasswordHash = _passwordHasher.HashPassword(null, registerDto.Password),
                 Role = "User"
             };
-
+            newUser.PasswordHash = _passwordHasher.HashPassword(newUser, registerDto.Password);
             await _userRepository.AddAsync(newUser);
 
             return true;
@@ -52,8 +50,12 @@ namespace TooliRent.Application.Services
         public async Task<string?> LoginUserAsync(LoginUserDto loginDto)
         {
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
-            var verificationResult = _passwordHasher.VerifyHashedPassword(null, user.PasswordHash, loginDto.Password);
-            if (user == null || verificationResult == PasswordVerificationResult.Failed)
+            if (user == null)
+            {
+                return null;
+            }
+            var verificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, loginDto.Password);
+            if (verificationResult == PasswordVerificationResult.Failed)
             {
                 return null;
             }

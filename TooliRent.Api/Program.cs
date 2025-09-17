@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,10 +12,10 @@ using TooliRent.Application.Interfaces.Services;
 using TooliRent.Application.Mappings;
 using TooliRent.Application.Services;
 using TooliRent.Application.Validators;
+using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
 using TooliRent.Infrastructure.Data;
 using TooliRent.Infrastructure.Repositories;
-using TooliRent.Infrastructure.SeedData;
 
 namespace TooliRent.Api
 {
@@ -24,7 +25,7 @@ namespace TooliRent.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // 1. JWT-konfiguration - måste vara först för att säkerställa att token-inställningarna är tillgängliga tidigt
+            // 1. JWT-konfiguration
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -54,6 +55,9 @@ namespace TooliRent.Api
             builder.Services.AddScoped<IToolCategoryService, ToolCategoryService>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<IBookingService, BookingService>();
+
+            // Registrera IPasswordHasher här!
+            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile));
             builder.Services.AddFluentValidationAutoValidation();
@@ -99,8 +103,25 @@ namespace TooliRent.Api
             // Kör databasmigreringar och seed-data
             using (var scope = app.Services.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<TooliRentDbContext>();
-                dbContext.Database.Migrate();
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<TooliRentDbContext>();
+                var passwordHasher = services.GetRequiredService<IPasswordHasher<User>>();
+
+                context.Database.Migrate();
+
+                // Seed-logiken
+                if (!context.Users.Any())
+                {
+                    var adminUser = new User
+                    {
+                        Name = "Admin",
+                        Email = "admin@tooli.se",
+                        Role = "Admin",
+                    };
+                    adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "admin");
+                    context.Users.Add(adminUser);
+                    context.SaveChanges();
+                }
             }
 
             // 4. HTTP Request Pipeline
