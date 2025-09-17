@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TooliRent.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TooliRent.Domain.Entities
 {
-    public class Tool
+    public class Tool 
     {
         public int Id { get; set; }
         public string Name { get; set; }

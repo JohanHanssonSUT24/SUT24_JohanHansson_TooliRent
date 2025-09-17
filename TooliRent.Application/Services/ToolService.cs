@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Enums;
-using TooliRent.Domain.Interfaces.Repositories; 
+using TooliRent.Domain.Interfaces.Repositories;
 
 namespace TooliRent.Application.Services
 {
@@ -17,28 +13,33 @@ namespace TooliRent.Application.Services
     {
         private readonly IToolRepository _toolRepository;
         private readonly IMapper _mapper;
+
         public ToolService(IToolRepository toolRepository, IMapper mapper)
         {
             _toolRepository = toolRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? searchTerm = null, ToolStatus? status = null)
+
+        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null)
         {
-            var tools = await _toolRepository.GetAllAsync(searchTerm, status);
+            var tools = await _toolRepository.GetToolsByFilterAsync(categoryName, status);
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
+
         public async Task<ToolDto> GetToolByIdAsync(int id)
         {
             var tool = await _toolRepository.GetByIdAsync(id);
             if (tool == null) return null;
             return _mapper.Map<ToolDto>(tool);
         }
+
         public async Task<ToolDto> CreateToolAsync(CreateToolDto toolDto)
         {
             var tool = _mapper.Map<Tool>(toolDto);
             await _toolRepository.AddAsync(tool);
             return _mapper.Map<ToolDto>(tool);
         }
+
         public async Task<bool> UpdateToolAsync(UpdateToolDto toolDto)
         {
             var toolToUpdate = await _toolRepository.GetByIdAsync(toolDto.Id);
@@ -48,13 +49,12 @@ namespace TooliRent.Application.Services
             }
             _mapper.Map(toolDto, toolToUpdate);
             await _toolRepository.UpdateAsync(toolToUpdate);
-
             return true;
         }
+
         public async Task<bool> DeleteToolAsync(int id)
         {
             return await _toolRepository.DeleteAsync(id);
-
         }
     }
 }

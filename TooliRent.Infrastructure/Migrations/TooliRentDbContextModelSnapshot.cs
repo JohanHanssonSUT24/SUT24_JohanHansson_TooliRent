@@ -90,6 +90,68 @@ namespace TooliRent.Infrastructure.Migrations
                     b.HasIndex("ToolCategoryId");
 
                     b.ToTable("Tools");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Kraftfull borrhammare för betong och tegel.",
+                            IsDeleted = false,
+                            Name = "Borrhammare",
+                            RentalPrice = 250m,
+                            Status = 0,
+                            ToolCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Lättanvänd skruvdragare med två batterier.",
+                            IsDeleted = false,
+                            Name = "Skruvdragare",
+                            RentalPrice = 120m,
+                            Status = 1,
+                            ToolCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "En robust såg för alla träprojekt.",
+                            IsDeleted = false,
+                            Name = "Såg",
+                            RentalPrice = 50m,
+                            Status = 0,
+                            ToolCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Komplett set med skiftnycklar i olika storlekar.",
+                            IsDeleted = false,
+                            Name = "Skiftnyckel-set",
+                            RentalPrice = 80m,
+                            Status = 0,
+                            ToolCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Effektiv gräsklippare för medelstora trädgårdar.",
+                            IsDeleted = false,
+                            Name = "Gräsklippare",
+                            RentalPrice = 200m,
+                            Status = 0,
+                            ToolCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Kraftig lövblås för att snabbt rensa upp i trädgården.",
+                            IsDeleted = false,
+                            Name = "Lövblås",
+                            RentalPrice = 150m,
+                            Status = 2,
+                            ToolCategoryId = 3
+                        });
                 });
 
             modelBuilder.Entity("TooliRent.Domain.Entities.ToolCategory", b =>
@@ -130,6 +192,18 @@ namespace TooliRent.Infrastructure.Migrations
                             Id = 3,
                             Description = "Verktyg för trädgårdsskötsel.",
                             Name = "Trädgårdsverktyg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Verktyg för målning och renovering.",
+                            Name = "Måleriverktyg"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Verktyg för fordon.",
+                            Name = "Bilverktyg"
                         });
                 });
 

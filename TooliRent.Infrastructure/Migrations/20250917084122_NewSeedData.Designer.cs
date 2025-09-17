@@ -12,8 +12,8 @@ using TooliRent.Infrastructure.Data;
 namespace TooliRent.Infrastructure.Migrations
 {
     [DbContext(typeof(TooliRentDbContext))]
-    [Migration("20250912074813_FinalCleanSetup")]
-    partial class FinalCleanSetup
+    [Migration("20250917084122_NewSeedData")]
+    partial class NewSeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace TooliRent.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookingTool", b =>
-                {
-                    b.Property<int>("BookingsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ToolsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BookingsId", "ToolsId");
-
-                    b.HasIndex("ToolsId");
-
-                    b.ToTable("BookingTool");
-                });
 
             modelBuilder.Entity("TooliRent.Domain.Entities.Booking", b =>
                 {
@@ -51,19 +36,24 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsPickedUp")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsReturned")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToolId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ToolId");
 
                     b.HasIndex("UserId");
 
@@ -78,15 +68,9 @@ namespace TooliRent.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("DailyRentalPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAvalible")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -94,6 +78,12 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("RentalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int>("ToolCategoryId")
                         .HasColumnType("int");
@@ -103,6 +93,68 @@ namespace TooliRent.Infrastructure.Migrations
                     b.HasIndex("ToolCategoryId");
 
                     b.ToTable("Tools");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Kraftfull borrhammare för betong och tegel.",
+                            IsDeleted = false,
+                            Name = "Borrhammare",
+                            RentalPrice = 250m,
+                            Status = 0,
+                            ToolCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Lättanvänd skruvdragare med två batterier.",
+                            IsDeleted = false,
+                            Name = "Skruvdragare",
+                            RentalPrice = 120m,
+                            Status = 1,
+                            ToolCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "En robust såg för alla träprojekt.",
+                            IsDeleted = false,
+                            Name = "Såg",
+                            RentalPrice = 50m,
+                            Status = 0,
+                            ToolCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Komplett set med skiftnycklar i olika storlekar.",
+                            IsDeleted = false,
+                            Name = "Skiftnyckel-set",
+                            RentalPrice = 80m,
+                            Status = 0,
+                            ToolCategoryId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Effektiv gräsklippare för medelstora trädgårdar.",
+                            IsDeleted = false,
+                            Name = "Gräsklippare",
+                            RentalPrice = 200m,
+                            Status = 0,
+                            ToolCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Kraftig lövblås för att snabbt rensa upp i trädgården.",
+                            IsDeleted = false,
+                            Name = "Lövblås",
+                            RentalPrice = 150m,
+                            Status = 2,
+                            ToolCategoryId = 3
+                        });
                 });
 
             modelBuilder.Entity("TooliRent.Domain.Entities.ToolCategory", b =>
@@ -143,6 +195,18 @@ namespace TooliRent.Infrastructure.Migrations
                             Id = 3,
                             Description = "Verktyg för trädgårdsskötsel.",
                             Name = "Trädgårdsverktyg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Verktyg för målning och renovering.",
+                            Name = "Måleriverktyg"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Verktyg för fordon.",
+                            Name = "Bilverktyg"
                         });
                 });
 
@@ -185,28 +249,21 @@ namespace TooliRent.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BookingTool", b =>
-                {
-                    b.HasOne("TooliRent.Domain.Entities.Booking", null)
-                        .WithMany()
-                        .HasForeignKey("BookingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TooliRent.Domain.Entities.Tool", null)
-                        .WithMany()
-                        .HasForeignKey("ToolsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TooliRent.Domain.Entities.Booking", b =>
                 {
+                    b.HasOne("TooliRent.Domain.Entities.Tool", "Tool")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ToolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TooliRent.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tool");
 
                     b.Navigation("User");
                 });
@@ -222,9 +279,19 @@ namespace TooliRent.Infrastructure.Migrations
                     b.Navigation("ToolCategory");
                 });
 
+            modelBuilder.Entity("TooliRent.Domain.Entities.Tool", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
             modelBuilder.Entity("TooliRent.Domain.Entities.ToolCategory", b =>
                 {
                     b.Navigation("Tools");
+                });
+
+            modelBuilder.Entity("TooliRent.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

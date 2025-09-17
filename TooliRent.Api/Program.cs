@@ -101,7 +101,6 @@ namespace TooliRent.Api
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TooliRentDbContext>();
                 dbContext.Database.Migrate();
-                TooliRentSeedData.Seed(dbContext);
             }
 
             // 4. HTTP Request Pipeline
