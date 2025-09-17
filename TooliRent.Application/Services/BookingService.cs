@@ -139,5 +139,50 @@ namespace TooliRent.Application.Services
             }
             return true;
         }
+        public async Task<bool> PickupBookingAsync(int bookingId, int userId)
+        {
+            var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+            if (booking == null)
+            {
+                return false;
+            }
+            if (booking.UserId != userId || booking.Status != BookingStatus.Active)
+            {
+                return false;
+            }
+
+            booking.Status = BookingStatus.PickedUp;
+            await _bookingRepository.UpdateBookingAsync(booking);
+
+            var tool = await _toolRepository.GetByIdAsync(booking.ToolId);
+            if(tool != null)
+            {
+                tool.Status = ToolStatus.Rented;
+                await _toolRepository.UpdateAsync(tool);
+            }
+            return true;
+        }
+        public async Task<bool> ReturnBookingAsync(int bookingId, int userId)
+        {
+            var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+            if (booking == null)
+            {
+                return false;
+            }
+            if (booking.UserId != userId || booking.Status != BookingStatus.PickedUp)
+            {
+                return false;
+            }
+            booking.Status = BookingStatus.Completed;
+            await _bookingRepository.UpdateBookingAsync(booking);
+
+            var tool = await _toolRepository.GetByIdAsync(booking.ToolId);
+            if (tool != null)
+            {
+                tool.Status = ToolStatus.Available;
+                await _toolRepository.UpdateAsync(tool);
+            }
+            return true;
+        }
     }
 }

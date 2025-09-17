@@ -10,6 +10,7 @@ namespace TooliRent.Domain.Enums
     {
         Active,
         Completed,
-        Cancelled
+        Cancelled,
+        PickedUp
     }
 }

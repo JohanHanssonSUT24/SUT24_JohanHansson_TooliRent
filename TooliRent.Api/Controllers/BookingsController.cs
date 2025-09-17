@@ -105,5 +105,37 @@ namespace TooliRent.Api.Controllers
             }
             return BadRequest(new {message = "Could not cancel booking. Booking not found."});
         }
+        [HttpPost("{id}/pickup")]
+        [Authorize(Roles = "Member,Admin")]
+        public async Task<ActionResult> PickupBooking(int id)
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                return Unauthorized();
+            }
+            var result = await _bookingService.PickupBookingAsync(id, userId);
+            if (result)
+            {
+                return Ok(new { message = "Booking picked up successfully." });
+            }
+            return BadRequest(new { message = "Could not pick up booking. Booking not found or invalid status." });
+        }
+        [HttpPost("{id}/return")]
+        [Authorize(Roles = "Member,Admin")]
+        public async Task<ActionResult> ReturnBooking(int id)
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                return Unauthorized();
+            }
+            var result = await _bookingService.ReturnBookingAsync(id, userId);
+            if (result)
+            {
+                return Ok(new { message = "Booking returned successfully." });
+            }
+            return BadRequest(new { message = "Could not return booking. Booking not found or invalid status." });
+        }
     }
 }
