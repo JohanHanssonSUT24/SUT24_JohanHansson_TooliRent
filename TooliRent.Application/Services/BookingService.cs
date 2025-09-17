@@ -63,7 +63,7 @@ namespace TooliRent.Application.Services
 
             await _bookingRepository.AddBookingAsync(booking);
 
-            //tool.Status = ToolStatus.Rented;
+            tool.Status = ToolStatus.Rented;
             await _toolRepository.UpdateAsync(tool);
 
             return _mapper.Map<BookingDto>(booking);
