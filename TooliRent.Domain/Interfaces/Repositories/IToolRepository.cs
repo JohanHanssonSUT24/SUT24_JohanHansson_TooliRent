@@ -10,10 +10,10 @@ namespace TooliRent.Domain.Interfaces.Repositories
 {
     public interface IToolRepository
     {
-        Task<IEnumerable<Tool>> GetAllAsync(string? searchTerm = null, ToolStatus? status = null);
         Task<Tool> GetByIdAsync(int id);
         Task AddAsync(Tool tool);
         Task UpdateAsync(Tool tool);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName, string? status = null);
     }
 }
