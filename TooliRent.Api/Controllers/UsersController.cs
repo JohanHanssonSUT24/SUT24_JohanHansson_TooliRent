@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TooliRent.Application.DTOs;
 using TooliRent.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace TooliRent.Api.Controllers
 {
@@ -42,6 +44,50 @@ namespace TooliRent.Api.Controllers
                 return Unauthorized(new { message = "Invalid email or password." });
             }
             return Ok(new { token });
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<UserDto>> GetUserById(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateDto)
+        {
+            if (id != updateDto.Id)
+            {
+                return BadRequest(new { message = "User ID in URL and body do not match." });
+            }
+            var result = await _userService.UpdateUserAsync(updateDto);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var result = await _userService.DeleteUserAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

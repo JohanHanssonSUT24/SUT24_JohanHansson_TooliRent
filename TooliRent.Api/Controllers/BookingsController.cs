@@ -39,7 +39,7 @@ namespace TooliRent.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Member")]
+        [Authorize(Roles = "Member, Admin")]
         public async Task<ActionResult<BookingDto>> CreateBooking([FromBody] CreateBookingDto bookingDto)
         {
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

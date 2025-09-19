@@ -13,11 +13,13 @@ namespace TooliRent.Application.Services
     {
         private readonly IToolRepository _toolRepository;
         private readonly IMapper _mapper;
+        private readonly IToolCategoryRepository _toolCategoryRepository;
 
-        public ToolService(IToolRepository toolRepository, IMapper mapper)
+        public ToolService(IToolRepository toolRepository, IMapper mapper, IToolCategoryRepository categoryRepository)
         {
             _toolRepository = toolRepository;
             _mapper = mapper;
+            _toolCategoryRepository = categoryRepository;
         }
 
         public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null)
@@ -33,9 +35,17 @@ namespace TooliRent.Application.Services
             return _mapper.Map<ToolDto>(tool);
         }
 
-        public async Task<ToolDto> CreateToolAsync(CreateToolDto toolDto)
+        public async Task<ToolDto> CreateToolAsync(CreateToolDto newToolDto)
         {
-            var tool = _mapper.Map<Tool>(toolDto);
+            var tool = _mapper.Map<Tool>(newToolDto);
+            if (newToolDto.ToolCategoryId.HasValue)
+            {
+                var category = await _toolCategoryRepository.GetByIdAsync(newToolDto.ToolCategoryId.Value);
+                if(category != null)
+                {
+                    tool.ToolCategory = category;
+                }
+            }
             await _toolRepository.AddAsync(tool);
             return _mapper.Map<ToolDto>(tool);
         }
