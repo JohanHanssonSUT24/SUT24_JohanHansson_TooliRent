@@ -31,6 +31,10 @@ namespace TooliRent.Application.Mappings
             CreateMap<Booking, BookingDto>()
                 .ForMember(dest => dest.ToolName, opt => opt.MapFrom(src => src.Tool.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name));
+
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<RegisterUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
         }
     }
 }

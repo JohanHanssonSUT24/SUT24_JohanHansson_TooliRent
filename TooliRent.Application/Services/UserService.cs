@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -19,13 +21,15 @@ namespace TooliRent.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IMapper _mapper;
 
 
-        public UserService(IUserRepository userRepository, IConfiguration configuration, IPasswordHasher<User> passwordHasher)
+        public UserService(IUserRepository userRepository, IConfiguration configuration, IPasswordHasher<User> passwordHasher, IMapper mapper)
         {
             _userRepository = userRepository;
             _configuration = configuration;
             _passwordHasher = passwordHasher;
+            _mapper = mapper;
         }
 
         public async Task<bool> RegisterUserAsync(RegisterUserDto registerDto)
@@ -84,6 +88,33 @@ namespace TooliRent.Application.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+        public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<UserDto>>(users);
+        }
+        public async Task<UserDto?> GetUserByIdAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null) return null;
+            return _mapper.Map<UserDto>(user);
+        }
+        public async Task<bool> UpdateUserAsync(UpdateUserDto updateDto)
+        {
+            var userToUpdate = await _userRepository.GetByIdAsync(updateDto.Id);
+            if (userToUpdate == null)
+            {
+                return false;
+
+            }
+            _mapper.Map(updateDto, userToUpdate);
+            await _userRepository.UpdateAsync(userToUpdate);
+            return true;
+        }
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            return await _userRepository.DeleteAsync(id);
         }
     }
 }

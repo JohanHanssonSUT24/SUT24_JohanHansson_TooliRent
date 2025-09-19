@@ -12,7 +12,7 @@ namespace TooliRent.Application.Interfaces.Services
     {
         Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null);
         Task<ToolDto> GetToolByIdAsync(int id);
-        Task<ToolDto> CreateToolAsync(CreateToolDto toolDto);
+        Task<ToolDto> CreateToolAsync(CreateToolDto newToolDto);
         Task <bool>UpdateToolAsync(UpdateToolDto toolDto);
         Task<bool> DeleteToolAsync(int id);
     }
