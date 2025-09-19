@@ -55,6 +55,7 @@ namespace TooliRent.Api
             builder.Services.AddScoped<IToolCategoryService, ToolCategoryService>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
             // Registrera IPasswordHasher här!
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
