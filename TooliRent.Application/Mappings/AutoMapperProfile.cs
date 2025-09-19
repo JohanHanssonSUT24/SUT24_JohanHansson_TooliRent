@@ -35,6 +35,8 @@ namespace TooliRent.Application.Mappings
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<RegisterUserDto, User>();
             CreateMap<UpdateUserDto, User>();
+            CreateMap<Tool, ToolStatisticsDto>();
+               
         }
     }
 }
