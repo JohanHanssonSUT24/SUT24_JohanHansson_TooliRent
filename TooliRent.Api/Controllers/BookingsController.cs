@@ -137,5 +137,38 @@ namespace TooliRent.Api.Controllers
             }
             return BadRequest(new { message = "Could not return booking. Booking not found or invalid status." });
         }
+        [HttpGet("overdue")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetOverdueBookings()
+        {
+            var bookings = await _bookingService.GetOverdueBookingsAsync();
+            if (bookings == null || !bookings.Any())
+            {
+                return NotFound(new { message = "No overdue bookings found." });
+            }
+            return Ok(bookings);
+        }
+        [HttpPost("{id}/markoverdue")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> MarkBookingAsOverdue(int id)
+        {
+            var result = await _bookingService.MarkBookingAsOverdueAsync(id);
+            if (result)
+            {
+                return Ok(new { message = "Booking marked as overdue successfully." });
+            }
+            return BadRequest(new { message = "Could not mark booking as overdue. Booking not found or invalid status." });
+        }
+        [HttpPost("{id}/approved")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ApprovedBooking(int id)
+        {
+            var result = await _bookingService.ApprovedBookingAsync(id);
+            if (result)
+            {
+                return Ok(new { message = "Booking approved successfully." });
+            }
+            return BadRequest(new { message = "Could not approve booking. Booking not found or invalid status." });
+        }
     }
 }

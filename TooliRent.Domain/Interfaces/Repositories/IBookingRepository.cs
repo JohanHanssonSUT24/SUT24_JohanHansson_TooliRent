@@ -17,5 +17,6 @@ namespace TooliRent.Domain.Interfaces.Repositories
 
         Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId);
         Task<IEnumerable<Booking>> GetActiveBookingsForToolAsync(int toolId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<Booking>> GetOverdueBookingsAsync();
     }
 }

@@ -20,10 +20,10 @@ namespace TooliRent.Api.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null, [FromQuery] ToolStatus? status = null)
+        public async Task<IActionResult> GetAll([FromQuery] string? searchTerm = null, [FromQuery] ToolStatus? status = null, [FromQuery] int? categoryId = null)
         {
             var statusString = status?.ToString();
-            var tools = await _toolsService.GetAllToolsAsync(searchTerm, statusString);
+            var tools = await _toolsService.GetAllToolsAsync(searchTerm, statusString, categoryId);
             return Ok(tools);
         }
         [HttpGet("{id}")]

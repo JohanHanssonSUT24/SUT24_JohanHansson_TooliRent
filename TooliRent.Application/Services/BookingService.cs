@@ -142,11 +142,13 @@ namespace TooliRent.Application.Services
         public async Task<bool> PickupBookingAsync(int bookingId, int userId)
         {
             var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+
             if (booking == null)
             {
                 return false;
             }
-            if (booking.UserId != userId || booking.Status != BookingStatus.Active)
+
+            if (booking.UserId != userId || (booking.Status != BookingStatus.Active && booking.Status != BookingStatus.Approved))
             {
                 return false;
             }
@@ -155,7 +157,7 @@ namespace TooliRent.Application.Services
             await _bookingRepository.UpdateBookingAsync(booking);
 
             var tool = await _toolRepository.GetByIdAsync(booking.ToolId);
-            if(tool != null)
+            if (tool != null)
             {
                 tool.Status = ToolStatus.Rented;
                 await _toolRepository.UpdateAsync(tool);
@@ -182,6 +184,33 @@ namespace TooliRent.Application.Services
                 tool.Status = ToolStatus.Available;
                 await _toolRepository.UpdateAsync(tool);
             }
+            return true;
+        }
+        public async Task<bool> MarkBookingAsOverdueAsync(int bookingId)
+        {
+            var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+            if(booking == null || booking.Status != BookingStatus.PickedUp || booking.EndDate >= DateTime.UtcNow)
+            {
+                return false;
+            }
+            booking.Status = BookingStatus.Overdue;
+            await _bookingRepository.UpdateBookingAsync(booking);
+            return true;
+        }
+        public async Task<IEnumerable<BookingDto>> GetOverdueBookingsAsync()
+        {
+            var bookings = await _bookingRepository.GetOverdueBookingsAsync();
+            return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+        }
+        public async Task<bool> ApprovedBookingAsync(int bookingId)
+        {
+            var booking = await _bookingRepository.GetBookingByIdAsync(bookingId);
+            if (booking == null || (booking.Status != BookingStatus.Pending && booking.Status != BookingStatus.Active))
+            {
+                return false;
+            }
+            booking.Status = BookingStatus.Approved;
+            await _bookingRepository.UpdateBookingAsync(booking);
             return true;
         }
     }
