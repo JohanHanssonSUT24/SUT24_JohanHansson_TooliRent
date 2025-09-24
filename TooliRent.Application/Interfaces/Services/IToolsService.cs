@@ -10,7 +10,7 @@ namespace TooliRent.Application.Interfaces.Services
 {
     public interface IToolService
     {
-        Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null);
+        Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null, int? categoryId = null);
         Task<ToolDto> GetToolByIdAsync(int id);
         Task<ToolDto> CreateToolAsync(CreateToolDto newToolDto);
         Task <bool>UpdateToolAsync(UpdateToolDto toolDto);

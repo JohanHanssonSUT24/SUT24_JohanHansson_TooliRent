@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TooliRent.Domain.Entities;
 using TooliRent.Domain.Interfaces.Repositories;
 using TooliRent.Infrastructure.Data;
+using TooliRent.Domain.Enums;
 
 namespace TooliRent.Infrastructure.Repositories
 {
@@ -58,6 +59,14 @@ namespace TooliRent.Infrastructure.Repositories
                 b.Status == Domain.Enums.BookingStatus.Active &&
                 (startDate < b.EndDate && endDate > b.StartDate))
 
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Booking>> GetOverdueBookingsAsync()
+        {
+            return await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Tool)
+                .Where(b => b.Status == BookingStatus.PickedUp && b.EndDate < DateTime.UtcNow)
                 .ToListAsync();
         }
     }

@@ -22,9 +22,9 @@ namespace TooliRent.Application.Services
             _toolCategoryRepository = categoryRepository;
         }
 
-        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null)
+        public async Task<IEnumerable<ToolDto>> GetAllToolsAsync(string? categoryName = null, string? status = null, int? categoryId = null)
         {
-            var tools = await _toolRepository.GetToolsByFilterAsync(categoryName, status);
+            var tools = await _toolRepository.GetToolsByFilterAsync(categoryName, status, categoryId);
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
 

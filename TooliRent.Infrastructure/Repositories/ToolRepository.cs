@@ -51,7 +51,7 @@ namespace TooliRent.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName = null, string? status = null)
+        public async Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName = null, string? status = null, int? categoryId = null)
         {
             var query = _context.Tools.AsQueryable();
 
@@ -68,6 +68,10 @@ namespace TooliRent.Infrastructure.Repositories
                 {
                     query = query.Where(t => t.Status == toolStatus);
                 }
+            }
+            if(categoryId.HasValue)
+            {
+                query = query.Where(t => t.ToolCategoryId == categoryId.Value);
             }
 
             return await query.ToListAsync();

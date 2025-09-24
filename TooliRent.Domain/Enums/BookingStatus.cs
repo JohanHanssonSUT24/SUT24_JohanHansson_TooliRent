@@ -11,6 +11,9 @@ namespace TooliRent.Domain.Enums
         Active,
         Completed,
         Cancelled,
-        PickedUp
+        PickedUp,
+        Overdue,
+        Approved,
+        Pending
     }
 }

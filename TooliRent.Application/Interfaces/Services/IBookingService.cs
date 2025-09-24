@@ -14,5 +14,8 @@ namespace TooliRent.Application.Interfaces.Services
         Task<bool> CancelBookingAsync(int bookingId, int userId);
         Task<bool> PickupBookingAsync(int bookingId, int userId);
         Task<bool> ReturnBookingAsync(int bookingId, int userId);
+        Task<bool> MarkBookingAsOverdueAsync(int bookingId);
+        Task<IEnumerable<BookingDto>> GetOverdueBookingsAsync();
+        Task<bool> ApprovedBookingAsync(int bookingId);
     }
 }

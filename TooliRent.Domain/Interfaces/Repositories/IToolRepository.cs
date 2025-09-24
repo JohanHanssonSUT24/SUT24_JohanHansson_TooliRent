@@ -15,6 +15,6 @@ namespace TooliRent.Domain.Interfaces.Repositories
         Task UpdateAsync(Tool tool);
         Task<bool> DeleteAsync(int id);
         Task<IEnumerable<Tool>> GetAllAsync();
-        Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName, string? status = null);
+        Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName, string? status = null, int? categoryId = null);
     }
 }
