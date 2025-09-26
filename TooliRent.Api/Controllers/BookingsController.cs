@@ -7,30 +7,31 @@ using TooliRent.Application.Interfaces.Services;
 using System.Collections.Generic;
 namespace TooliRent.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //Set base route to api/*
     [ApiController]
     public class BookingsController : ControllerBase
     {
-        private readonly IBookingService _bookingService;
+        private readonly IBookingService _bookingService; // Dependency injection for business logic
 
-        public BookingsController(IBookingService bookingService)
+        public BookingsController(IBookingService bookingService) //Constructor for DI
         {
-            _bookingService = bookingService;
+            _bookingService = bookingService; 
         }
 
+        //Endpoints
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]// Only users with Admin role can access this endpoint
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetAllBookings()
         {
-            var bookings = await _bookingService.GetAllBookingsAsync();
+            var bookings = await _bookingService.GetAllBookingsAsync();// Await the service to get all bookings
             return Ok(bookings);
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Member")]
+        [Authorize(Roles = "Admin, Member")] // Only users with Admin or Member role can access this endpoint
         public async Task<ActionResult<BookingDto>> GetBookingById(int id)
         {
-            var booking = await _bookingService.GetBookingByIdAsync(id);
+            var booking = await _bookingService.GetBookingByIdAsync(id); // Await the service to get booking by id
             if (booking == null)
             {
                 return NotFound();
@@ -40,20 +41,20 @@ namespace TooliRent.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<ActionResult<BookingDto>> CreateBooking([FromBody] CreateBookingDto bookingDto)
+        public async Task<ActionResult<BookingDto>> CreateBooking([FromBody] CreateBookingDto bookingDto) //Returns a Task of ActionResult, expecting a CreateBookingDto in the request body
         {
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdString == null)
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;// Retrive user ID from JWT token
+            if (userIdString == null) //Check if Null
             {
                 return Unauthorized();
             }
 
-            if (!int.TryParse(userIdString, out int userId))
+            if (!int.TryParse(userIdString, out int userId))//TryParse to Int. If fail reurn 400 bad request respons.
             {
                 return BadRequest("Invalid user ID.");
             }
 
-            var booking = await _bookingService.CreateBookingAsync(bookingDto, userId);
+            var booking = await _bookingService.CreateBookingAsync(bookingDto, userId); //Call service to create new booking
             if (booking == null)
             {
                 return BadRequest("Could not create booking. The tool might not be available or the dates are invalid.");
