@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace TooliRent.Application.Interfaces.Services
 {
-    public interface IBookingService
+    public interface IBookingService //Create Interface for all added Services
     {
         Task<IEnumerable<BookingDto>> GetAllBookingsAsync();
         Task<BookingDto> GetBookingByIdAsync(int id);

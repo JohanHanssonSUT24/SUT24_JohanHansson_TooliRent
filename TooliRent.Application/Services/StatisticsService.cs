@@ -22,7 +22,7 @@ namespace TooliRent.Application.Services
             _bookingRepository = bookingRepository;
             _mapper = mapper;
         }
-        public async Task<StatisticsDto> GetStatisticsAsync()
+        public async Task<StatisticsDto> GetStatisticsAsync()//Retrieves overall statistics including total users, tools, bookings, available tools, and rented tools.
         {
             var users = await _userRepository.GetAllAsync();
             var tools = await _toolRepository.GetAllAsync();
@@ -38,12 +38,12 @@ namespace TooliRent.Application.Services
             };
             return statistics;
         }
-        public async Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(string categoryName)
+        public async Task<IEnumerable<ToolDto>> GetToolsByCategoryAsync(string categoryName)//Retrieves tools filtered by a specific category and maps them to ToolDto objects.
         {
             var tools = await _toolRepository.GetToolsByFilterAsync(categoryName);
             return _mapper.Map<IEnumerable<ToolDto>>(tools);
         }
-        public async Task<ToolStatisticsDto> GetToolStatisticsByIdAsync(int toolId)
+        public async Task<ToolStatisticsDto> GetToolStatisticsByIdAsync(int toolId)//Retrieves statistics for a specific tool, including total rentals, and maps it to a ToolStatisticsDto object.
         {
             var tool = await _toolRepository.GetByIdAsync(toolId);
             if(tool == null)

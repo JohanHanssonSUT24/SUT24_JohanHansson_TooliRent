@@ -64,18 +64,18 @@ namespace TooliRent.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin, Member")]
-        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBookingDto bookingDto)
+        public async Task<IActionResult> UpdateBooking(int id, [FromBody] UpdateBookingDto bookingDto) //Returns a Task of IActionResult, expecting an UpdateBookingDto in the request body
         {
-            var result = await _bookingService.UpdateBookingAsync(id, bookingDto);
+            var result = await _bookingService.UpdateBookingAsync(id, bookingDto); //Call service to update booking
             if (!result)
             {
-                return NotFound();
+                return NotFound(); // If booking not found, return 404 Not Found
             }
-            return NoContent();
+            return NoContent();// If successful, return 204 No Content
         }
         [HttpGet("mybookings")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<ActionResult<IEnumerable<BookingDto>>> GetMyBookings()
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetMyBookings() // Get bookings for the authenticated user
         {
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
@@ -83,39 +83,39 @@ namespace TooliRent.Api.Controllers
                 return Unauthorized(new {message = "User not found or invalid token."});
             }
             
-            var bookings = await _bookingService.GetBookingsByUserIdAsync(userId);
-            if(bookings == null ||  !bookings.Any())
+            var bookings = await _bookingService.GetBookingsByUserIdAsync(userId); // Call service to get bookings by user ID
+            if (bookings == null ||  !bookings.Any())
             {
-                return NotFound(new { message = "No bookings found for this user." });
+                return NotFound(new { message = "No bookings found for this user." });// If no bookings found, return 404 Not Found
             }
             return Ok(bookings);
         }
         [HttpDelete("{id}")]
         [Authorize(Roles = "Member, Admin")]
-        public async Task<ActionResult> CancelBooking(int id)
+        public async Task<ActionResult> CancelBooking(int id)// Cancel a booking by ID
         {
-            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;// Get user ID from JWT token
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))// Check if user ID is valid
             {
                 return Unauthorized();
             }
-            var result = await _bookingService.CancelBookingAsync(id, userId);
+            var result = await _bookingService.CancelBookingAsync(id, userId);// Call service to cancel booking
             if (result)
             {
-                return Ok(new { message = "Booking cancelled successfully." });
+                return Ok(new { message = "Booking cancelled successfully." });//Verify if successful
             }
-            return BadRequest(new {message = "Could not cancel booking. Booking not found."});
+            return BadRequest(new {message = "Could not cancel booking. Booking not found."});// If not successful, return 400 Bad Request
         }
         [HttpPost("{id}/pickup")]
         [Authorize(Roles = "Member,Admin")]
-        public async Task<ActionResult> PickupBooking(int id)
+        public async Task<ActionResult> PickupBooking(int id)// Mark a booking as picked up
         {
             var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))// Check if user ID is valid
             {
                 return Unauthorized();
             }
-            var result = await _bookingService.PickupBookingAsync(id, userId);
+            var result = await _bookingService.PickupBookingAsync(id, userId);// Call service to pick up booking
             if (result)
             {
                 return Ok(new { message = "Booking picked up successfully." });
@@ -124,14 +124,14 @@ namespace TooliRent.Api.Controllers
         }
         [HttpPost("{id}/return")]
         [Authorize(Roles = "Member,Admin")]
-        public async Task<ActionResult> ReturnBooking(int id)
+        public async Task<ActionResult> ReturnBooking(int id)// Mark a booking as returned
         {
             var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))// Check if user ID is valid
             {
                 return Unauthorized();
             }
-            var result = await _bookingService.ReturnBookingAsync(id, userId);
+            var result = await _bookingService.ReturnBookingAsync(id, userId);// Call service to return booking
             if (result)
             {
                 return Ok(new { message = "Booking returned successfully." });
@@ -140,10 +140,10 @@ namespace TooliRent.Api.Controllers
         }
         [HttpGet("overdue")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<BookingDto>>> GetOverdueBookings()
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetOverdueBookings()// Get all overdue bookings
         {
             var bookings = await _bookingService.GetOverdueBookingsAsync();
-            if (bookings == null || !bookings.Any())
+            if (bookings == null || !bookings.Any())// If no overdue bookings found, return 404 Not Found
             {
                 return NotFound(new { message = "No overdue bookings found." });
             }
@@ -151,9 +151,9 @@ namespace TooliRent.Api.Controllers
         }
         [HttpPost("{id}/markoverdue")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> MarkBookingAsOverdue(int id)
+        public async Task<ActionResult> MarkBookingAsOverdue(int id)// Mark a booking as overdue
         {
-            var result = await _bookingService.MarkBookingAsOverdueAsync(id);
+            var result = await _bookingService.MarkBookingAsOverdueAsync(id);// Call service to mark booking as overdue
             if (result)
             {
                 return Ok(new { message = "Booking marked as overdue successfully." });
@@ -162,9 +162,9 @@ namespace TooliRent.Api.Controllers
         }
         [HttpPost("{id}/approved")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ApprovedBooking(int id)
+        public async Task<IActionResult> ApprovedBooking(int id)// Approve a booking
         {
-            var result = await _bookingService.ApprovedBookingAsync(id);
+            var result = await _bookingService.ApprovedBookingAsync(id);// Call service to approve booking
             if (result)
             {
                 return Ok(new { message = "Booking approved successfully." });

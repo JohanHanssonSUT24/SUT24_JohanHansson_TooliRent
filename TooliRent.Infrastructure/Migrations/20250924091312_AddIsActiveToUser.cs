@@ -5,7 +5,7 @@
 namespace TooliRent.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddIsActiveToUser : Migration
+    public partial class AddIsActiveToUser : Migration 
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

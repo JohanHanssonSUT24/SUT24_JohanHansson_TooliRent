@@ -7,7 +7,7 @@ using TooliRent.Domain.Enums;
 
 namespace TooliRent.Domain.Entities
 {
-    public  class Booking
+    public  class Booking //Create Entities to represent the data model and its relationships.
     {
         public int Id { get; set; }
         public int UserId { get; set; }

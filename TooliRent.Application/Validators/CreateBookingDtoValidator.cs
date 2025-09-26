@@ -8,7 +8,7 @@ using TooliRent.Application.DTOs;
 
 namespace TooliRent.Application.Validators
 {
-    public class CreateBookingDtoValidator : AbstractValidator<CreateBookingDto>
+    public class CreateBookingDtoValidator : AbstractValidator<CreateBookingDto>// Create validators for DTOs using FluentValidation.Set up rules for specific validation scenarios.
     {
         public CreateBookingDtoValidator()
         {

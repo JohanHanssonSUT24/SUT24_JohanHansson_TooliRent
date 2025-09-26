@@ -9,18 +9,18 @@ using TooliRent.Domain.Entities;
 
 namespace TooliRent.Application.Mappings
 {
-    public class AutoMapperProfile : Profile
+    public class AutoMapperProfile : Profile//Use AutoMapper to define mappings between entities and DTOs
     {
         public AutoMapperProfile() 
         {
-            CreateMap<Tool, ToolDto>()
+            CreateMap<Tool, ToolDto>()//Custom mapping for Tool to ToolDto. Maps the ToolCategoryName from the related ToolCategory entity.
                 .ForMember(dest => dest.ToolCategoryName, opt => opt.MapFrom(src => src.ToolCategory.Name))
                 .ReverseMap();
 
-            CreateMap<CreateToolDto, Tool>()
+            CreateMap<CreateToolDto, Tool>() // Map CreateToolDto to Tool entity
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
-            CreateMap<UpdateToolDto, Tool>()
+            CreateMap<UpdateToolDto, Tool>() // Map UpdateToolDto to Tool entity
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
             CreateMap<ToolCategory, ToolCategoryDto>().ReverseMap();
@@ -28,7 +28,7 @@ namespace TooliRent.Application.Mappings
             CreateMap<UpdateToolCategoryDto, ToolCategory>();
 
             CreateMap<CreateBookingDto, Booking>();
-            CreateMap<Booking, BookingDto>()
+            CreateMap<Booking, BookingDto>() // Custom mapping for Booking to BookingDto. Maps ToolName and UserName from related entities.
                 .ForMember(dest => dest.ToolName, opt => opt.MapFrom(src => src.Tool.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name));
 

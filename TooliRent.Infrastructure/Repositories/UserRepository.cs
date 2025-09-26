@@ -20,30 +20,30 @@ namespace TooliRent.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)//Retrieves a user by their email address from the database.
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(User user)//Adds a new user to the database and saves changes.
         {
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()//Retrieves all users from the database.
         {
             return await _context.Users.ToListAsync();
         }
-        public async Task<User?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)//Retrieves a specific user by their ID from the database.
         {
             return await _context.Users.FindAsync(id);
         }
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)//Updates an existing user in the database and saves changes.
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)//Deletes a user by their ID from the database and saves changes.
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
