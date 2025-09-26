@@ -7,7 +7,7 @@ using TooliRent.Domain.Entities;
 
 namespace TooliRent.Domain.Interfaces.Repositories
 {
-    public interface IBookingRepository
+    public interface IBookingRepository //Define Repository Interface to abstract data access logic and provide a contract for data operations.
     {
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
         Task<Booking> GetBookingByIdAsync(int id);

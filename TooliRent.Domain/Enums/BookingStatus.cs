@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TooliRent.Domain.Enums
 {
-    public enum BookingStatus
+    public enum BookingStatus //Create Enums to represent fixed sets of related constants.
     {
         Active,
         Completed,

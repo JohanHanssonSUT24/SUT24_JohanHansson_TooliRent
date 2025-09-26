@@ -19,7 +19,7 @@ namespace TooliRent.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Tool> GetByIdAsync(int id)
+        public async Task<Tool> GetByIdAsync(int id)//Retrieves a specific tool by its ID, including its category, from the database if it is not marked as deleted.
         {
             return await _context.Tools
                 .Include(t => t.ToolCategory)
@@ -27,19 +27,19 @@ namespace TooliRent.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task AddAsync(Tool tool)
+        public async Task AddAsync(Tool tool)//Adds a new tool to the database and saves changes.
         {
             await _context.Tools.AddAsync(tool);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Tool tool)
+        public async Task UpdateAsync(Tool tool)//Updates an existing tool in the database and saves changes.
         {
             _context.Tools.Update(tool);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)//Soft-deletes a tool by its ID by setting its IsDeleted flag to true and saves changes.
         {
             var toolToDelete = await _context.Tools.FindAsync(id);
             if (toolToDelete == null)
@@ -51,7 +51,7 @@ namespace TooliRent.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName = null, string? status = null, int? categoryId = null)
+        public async Task<IEnumerable<Tool>> GetToolsByFilterAsync(string? categoryName = null, string? status = null, int? categoryId = null)//Retrieves tools from the database with optional filtering by category name, status, or category ID, including their categories.
         {
             var query = _context.Tools.AsQueryable();
 
@@ -76,7 +76,7 @@ namespace TooliRent.Infrastructure.Repositories
 
             return await query.ToListAsync();
         }
-        public async Task<IEnumerable<Tool>> GetAllAsync()
+        public async Task<IEnumerable<Tool>> GetAllAsync()//Retrieves all tools from the database.
         {
             return await _context.Tools.ToListAsync();
         }

@@ -8,34 +8,34 @@ using TooliRent.Domain.Enums;
 
 namespace TooliRent.Infrastructure.Repositories
 {
-    public class BookingRepository : IBookingRepository
+    public class BookingRepository : IBookingRepository //Implement Repository to handle data access logic and interact with the database using EF.
     {
         private readonly TooliRentDbContext _context;
         public BookingRepository(TooliRentDbContext context)
         {
             _context = context;
         }
-        public async Task<IEnumerable<Booking>> GetAllBookingsAsync()
+        public async Task<IEnumerable<Booking>> GetAllBookingsAsync() //Retrieve all bookings, including related Tool and User entities, from the database.
         {
-            return await _context.Bookings.Include(b => b.Tool).Include(b => b.User).ToListAsync();
+            return await _context.Bookings.Include(b => b.Tool).Include(b => b.User).ToListAsync();// Include related entities
         }
-        public async Task<Booking> GetBookingByIdAsync(int id)
+        public async Task<Booking> GetBookingByIdAsync(int id)//Retrieve a specific booking by its ID, including related Tool and User entities, from the database.
         {
-            return await _context.Bookings.Include(b => b.Tool).Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
+            return await _context.Bookings.Include(b => b.Tool).Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);// Include related entities
         }
-        public async Task AddBookingAsync(Booking booking)
+        public async Task AddBookingAsync(Booking booking)//Add a new booking to the database and save changes.
         {
             await _context.Bookings.AddAsync(booking);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateBookingAsync(Booking booking)
+        public async Task UpdateBookingAsync(Booking booking)//Update an existing booking in the database and save changes.
         {
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteBookingAsync(int id)
+        public async Task DeleteBookingAsync(int id)//Delete a booking by its ID from the database and save changes.
         {
             var booking = await _context.Bookings.FindAsync(id);
             if (booking != null)
@@ -44,7 +44,7 @@ namespace TooliRent.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId)
+        public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId)//Retrieve all bookings associated with a specific user, including related Tool and User entities, from the database.
         {
             return await _context.Bookings
                 .Where(b => b.UserId == userId)
@@ -52,7 +52,7 @@ namespace TooliRent.Infrastructure.Repositories
                 .Include(b => b.User)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Booking>> GetActiveBookingsForToolAsync(int toolId, DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<Booking>> GetActiveBookingsForToolAsync(int toolId, DateTime startDate, DateTime endDate)//Retrieve active bookings for a specific tool that overlap with a given date range from the database.
         {
             return await _context.Bookings
                 .Where(b => b.ToolId == toolId &&
@@ -61,7 +61,7 @@ namespace TooliRent.Infrastructure.Repositories
 
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Booking>> GetOverdueBookingsAsync()
+        public async Task<IEnumerable<Booking>> GetOverdueBookingsAsync()//Retrieve all bookings that are overdue (i.e., picked up but not returned by the end date), including related Tool and User entities, from the database.
         {
             return await _context.Bookings
                 .Include(b => b.User)

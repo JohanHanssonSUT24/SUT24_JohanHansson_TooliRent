@@ -17,26 +17,26 @@ namespace TooliRent.Api.Controllers
             _statisticsService = statisticsService;
         }
         [HttpGet]
-        public async Task<ActionResult<StatisticsDto>> GetStatistics()
+        public async Task<ActionResult<StatisticsDto>> GetStatistics()// Get overall statistics
         {
-            var statistics = await _statisticsService.GetStatisticsAsync();
+            var statistics = await _statisticsService.GetStatisticsAsync();// Await the service to get statistics
             return Ok(statistics);
         }
         [HttpGet("category/{categoryName}")]
-        public async Task<ActionResult<IEnumerable<ToolDto>>> GetToolsByCategory(string categoryName)
+        public async Task<ActionResult<IEnumerable<ToolDto>>> GetToolsByCategory(string categoryName)// Get tools by category name
         {
-            var tools = await _statisticsService.GetToolsByCategoryAsync(categoryName);
-            if(tools == null || !tools.Any())
+            var tools = await _statisticsService.GetToolsByCategoryAsync(categoryName);// Await the service to get tools by category
+            if (tools == null || !tools.Any())
             {
                 return NotFound($"No tools found in category {categoryName}.");
             }
             return Ok(tools);
         }
         [HttpGet("tool/{toolId}")]
-        public async Task<ActionResult<ToolStatisticsDto>> GetToolStatistics(int toolId)
+        public async Task<ActionResult<ToolStatisticsDto>> GetToolStatistics(int toolId)// Get statistics for a specific tool by ID
         {
-            var statistics = await _statisticsService.GetToolStatisticsByIdAsync(toolId);
-            if(statistics == null)
+            var statistics = await _statisticsService.GetToolStatisticsByIdAsync(toolId);// Await the service to get tool statistics by ID
+            if (statistics == null)
             {
                 return NotFound($"No tool with ID '{toolId}' found.");
             }

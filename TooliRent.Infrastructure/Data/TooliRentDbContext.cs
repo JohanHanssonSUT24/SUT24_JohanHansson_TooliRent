@@ -9,19 +9,19 @@ using TooliRent.Domain.Enums;
 
 namespace TooliRent.Infrastructure.Data
 {
-    public class TooliRentDbContext : DbContext
+    public class TooliRentDbContext : DbContext //Add DBContext
     {
-        public TooliRentDbContext(DbContextOptions<TooliRentDbContext> options) : base(options)
+        public TooliRentDbContext(DbContextOptions<TooliRentDbContext> options) : base(options) // Constructor
         {
         }
-        public DbSet<Tool> Tools { get; set; }
+        public DbSet<Tool> Tools { get; set; } // Add DbSets for each entity
         public DbSet<ToolCategory> ToolCategories { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); //Add seed data
 
             modelBuilder.Entity<ToolCategory>().HasData(
                 new ToolCategory { Id = 1, Name = "Elverktyg", Description = "Verktyg som drivs med el." },
@@ -40,7 +40,6 @@ namespace TooliRent.Infrastructure.Data
                 new Tool { Id = 6, Name = "Lövblås", Description = "Kraftig lövblås för att snabbt rensa upp i trädgården.", RentalPrice = 150, Status = ToolStatus.UnderMaintenance, IsDeleted = false, ToolCategoryId = 3 }
             );
 
-            // Användarnamn för admin
             modelBuilder.Entity<User>().HasData(
                 new User { Id = 1, Name = "Admin", Email = "admin@tooli.se", PasswordHash = "admin", Role = "Admin" }
             );

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TooliRent.Application.DTOs
 {
-    public class AddToolDto
+    public class AddToolDto //Add DTOs for all necessary entities
     {
         [Required]
         [StringLength(100)]
