@@ -89,5 +89,28 @@ namespace TooliRent.Api.Controllers
             }
             return NoContent();
         }
+
+        [HttpPost("{id}/activate")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActivateUser(int id)
+        {
+            var success = await _userService.ToggleUserStatusAsync(id, true);
+            if (success)
+            {
+                return Ok(new {message = "User activated successfully." });
+            }
+            return NotFound(new { message = "User not found." });
+        }
+        [HttpPost("{id}/deactivate")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeactivateUser(int id)
+        {
+            var success = await _userService.ToggleUserStatusAsync(id, false);
+            if (success)
+            {
+                return Ok(new { message = "User deactivated successfully." });
+            }
+            return NotFound(new { message = "User not found." });
+        }
     }
 }

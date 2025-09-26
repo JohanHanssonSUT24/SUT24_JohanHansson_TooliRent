@@ -12,5 +12,6 @@ namespace TooliRent.Application.Interfaces.Services
         Task<UserDto?> GetUserByIdAsync(int id);
         Task<bool> UpdateUserAsync(UpdateUserDto updateDto);
         Task<bool> DeleteUserAsync(int id);
+        Task<bool> ToggleUserStatusAsync(int userId, bool isActive);
     }
 }

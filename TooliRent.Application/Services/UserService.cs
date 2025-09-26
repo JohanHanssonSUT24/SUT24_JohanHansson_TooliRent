@@ -116,5 +116,16 @@ namespace TooliRent.Application.Services
         {
             return await _userRepository.DeleteAsync(id);
         }
+        public async Task<bool> ToggleUserStatusAsync(int userId, bool isActive)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            user.IsActive = isActive;
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
     }
 }
